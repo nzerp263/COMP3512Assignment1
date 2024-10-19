@@ -13,7 +13,7 @@
                       </div>
                     </div>
                     <div class="col-8">
-                        <img src="public/race-car.png" class="img-fluid rounded mx-auto d-block" alt="Cinque Terre" width="1100" height="800">
+                        <img src="./public/race.png" class="img-fluid rounded mx-auto d-block" alt="Cinque Terre" width="1100" height="800">
                     </div>
                 </div>
             </div>

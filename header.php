@@ -31,7 +31,7 @@ require_once('config.inc.php');
                         <a class="dropdown-item" href="browse.php">Browse</a>
                     </button>
                     <button class="btn btn-primary" type="button">
-                        <a class="dropdown-item" href="apis.php">APIs</a>
+                        <a class="dropdown-item" href="api.php">APIs</a>
                     </button>
                 </div>
             </div>
