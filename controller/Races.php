@@ -1,21 +1,24 @@
 <?php
 
-  require_once('config.inc.php');
-  
+
   class Races {
-    public $pdo;
+    public $db;
 
     public function __construct() {
-      $this->pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $this->db = getDBObject();
     }
 
     function getRaces() {
       
       $sql = "SELECT * FROM races WHERE year = 2022 ORDER BY name";
   
-      $result = $this->pdo->query($sql);
-      return json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $this->db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+          $data[] = $row;
+      }
+      return json_encode($data);
     } 
 
     function displayRaces($races) {
@@ -56,8 +59,13 @@
               INNER JOIN constructors ON constructors.constructorId = results.constructorId
               WHERE year = 2022 AND races.raceId = " . $raceId;
   
-      $result = $this->pdo->query($sql);
-      return json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $this->db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+          $data[] = $row;
+      }
+      return json_encode($data);
     } 
 
     function getRaceQualification($raceId) {
@@ -71,8 +79,13 @@
                 races.raceId = " . $raceId . "
               ORDER BY qualifyId";
   
-      $result = $this->pdo->query($sql);
-      return json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $this->db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+          $data[] = $row;
+      }
+      return json_encode($data);
     } 
 
     function displayRacesResult($raceResults) {

@@ -1,14 +1,10 @@
 <?php
 
-  require_once('config.inc.php');
-
-
   class Drivers {
-    public $pdo;
+    public $db;
 
     public function __construct() {
-      $this->pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $this->db = getDBObject();
     }
 
     public function drivers($driverRef) {
@@ -18,10 +14,15 @@
           $sql = "SELECT forename, surname, dob, nationality, url, code FROM drivers WHERE driverRef = '" . $driverRef . "' LIMIT 1";
         }
         
-        $result = $this->pdo->query($sql);
-        return json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+        $result = $this->db->query($sql);
+        $data = [];
+
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $data[] = $row;
+        }
+        return json_encode($data);
       } catch (PDOException $e) {
-        $this->pdo = null;
+        $this->db->close();
         die( $e->getMessage() );
      } 
     }
@@ -36,10 +37,15 @@
           WHERE DR.driverRef = '" . $surname . "' AND RA.year = 2022
           ORDER BY RA.round;
         ";
-        $result = $this->pdo->query($sql);
-        return json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+        $result = $this->db->query($sql);
+        $data = [];
+
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $data[] = $row;
+        }
+        return json_encode($data);
       } catch (PDOException $e) {
-        $this->pdo = null;
+        $this->db->close();
         die( $e->getMessage() );
      } 
     }

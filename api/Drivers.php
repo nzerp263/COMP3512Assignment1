@@ -1,6 +1,6 @@
 <?php
 
-  require_once('../config.inc.php');
+  require_once('../data/database.php');
 
     if (isset($_GET['driverRef'])) {
       getDriver($_GET['driverRef']);
@@ -11,8 +11,7 @@
     }
   
     function getDriver($driverRef) {
-      $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db = getDBObject();
       $sql = "SELECT * FROM drivers 
               INNER JOIN results ON drivers.driverId = results.driverId
               INNER JOIN races ON results.raceId = races.raceId
@@ -20,26 +19,40 @@
                 year = 2022 AND
                 driverRef = '" . $driverRef . "'";
   
-      $result = $pdo->query($sql);
-      echo json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+          $data[] = $row;
+      }
+      echo json_encode($data);
+
+      // Close the database connection
+      $db->close(); 
     }
   
     function getDrivers() {
-      $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db = getDBObject();
       $sql = "SELECT * FROM drivers 
               INNER JOIN results ON drivers.driverId = results.driverId
               INNER JOIN races ON results.raceId = races.raceId
               WHERE 
                 year = 2022;";
   
-      $result = $pdo->query($sql);
-      echo json_encode($result->fetchAll(PDO::FETCH_ASSOC));  
+      $result = $db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+          $data[] = $row;
+      }
+      echo json_encode($data);
+
+      // Close the database connection
+      $db->close();  
   } 
 
   function getDriversForRace($raceId) {
-    $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db = getDBObject();
 
     $sql = "SELECT * FROM drivers 
             INNER JOIN results ON drivers.driverId = results.driverId
@@ -47,7 +60,15 @@
             WHERE 
               races.raceId = '" . $raceId . "'";
 
-    $result = $pdo->query($sql);
-    echo json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+    $result = $db->query($sql);
+    $data = [];
+
+    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode($data);
+
+    // Close the database connection
+    $db->close(); 
   }
 ?>

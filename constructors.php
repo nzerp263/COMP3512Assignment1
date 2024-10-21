@@ -95,13 +95,19 @@
               <div class="col-4">
                 <h3> Constructor Details </h3>
                 <?php
+                if(isset($_GET['constructorRef'])) {
                   $constructor = new Constructors();
                   displayConstructor($constructor->displayConstructor());
+                } else {
+                  echo "<p>Constructor reference is not passed in the URL</p>";
+                }
                 ?>
               </div>
               <div class="col-8">
                 <?php 
+                if(isset($_GET['constructorRef'])) {
                   displayDriversAndRaces(json_decode($constructor->getDriversAndRaces($_GET['constructorRef']), true));
+                }
                 ?>
               </div>
           </div>
@@ -112,6 +118,6 @@
 
 <?php
 
-  // require_once('footer.php');
+  require_once('footer.php');
 
 ?>

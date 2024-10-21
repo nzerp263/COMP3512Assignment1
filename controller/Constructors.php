@@ -1,14 +1,10 @@
 <?php
 
-  require_once('config.inc.php');
-
-
   class Constructors {
-    public $pdo;
+    public $db;
 
     public function __construct() {
-      $this->pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $this->db = getDBObject();
     }
 
     public function constructor($constructorRef) {
@@ -18,10 +14,15 @@
           $sql = "SELECT * FROM constructors WHERE constructorRef = '" . $constructorRef . "' LIMIT 1";
         }
         
-        $result = $this->pdo->query($sql);
-        return json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+        $result = $this->db->query($sql);
+        $data = [];
+
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $data[] = $row;
+        }
+        return json_encode($data);
       } catch (PDOException $e) {
-        $this->pdo = null;
+        $this->db->close();
         die( $e->getMessage() );
      } 
     }
@@ -36,10 +37,15 @@
           WHERE CO.constructorRef = '" . $constructorRef . "' AND RA.year = 2022
           ORDER BY RA.round;
         ";
-        $result = $this->pdo->query($sql);
-        return json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+        $result = $this->db->query($sql);
+        $data = [];
+
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $data[] = $row;
+        }
+        return json_encode($data);
       } catch (PDOException $e) {
-        $this->pdo = null;
+        $this->db->close();
         die( $e->getMessage() );
      } 
     }

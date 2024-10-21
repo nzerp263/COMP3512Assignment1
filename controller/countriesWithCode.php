@@ -177,7 +177,7 @@
     'Ugandan' => 'ug',
     'Ukrainian' => 'ua',
     'United Arab Emirates' => 'ae',
-    'British' => 'uk',
+    'British' => 'gb-eng',
     'United States' => 'us',
     'American' => 'us',
     'Uruguayan' => 'uy',

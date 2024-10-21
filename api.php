@@ -42,7 +42,7 @@
         <td>
           <a target="_blank" href="<?php echo $baseUrl . '/constructors.php?constructorRef=mclaren'?>">/api/constructors.php?constructorRef=mclaren</a>
         </td>
-        <td>Returns just the specified circuit (use the circuitRef field), e.g., /api/circuits.php?ref=monaco</td>
+        <td>Returns just the specified driver (use the driverRef field), e.g., /api/drivers/mclaren</td>
       </tr>
 
       <!-- Drivers -->
@@ -74,7 +74,7 @@
       </tr>
       <tr>
         <td>
-          <a target="_blank" href="<?php echo $baseUrl . '/races.php?season=2022'?>">/races.php</a>
+          <a target="_blank" href="<?php echo $baseUrl . '/races.php?season=2022'?>">/api/races.php</a>
         </td>
         <td>Returns the races within the 2022 season ordered by round, e.g., /api/races/season/2022</td>
       </tr>

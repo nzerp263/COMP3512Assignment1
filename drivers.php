@@ -52,6 +52,8 @@
           <div class="row g-0">
               <div class="col-4">
               <?php
+
+                if(isset($_GET['driverRef'])) {
                   $driver = $driver->getDriverDetails();
                   echo 
                   "<div class='card' style='max-width:80%'>
@@ -63,7 +65,7 @@
                       <li class='list-group-item'>" . $driver['age'] . " Years Old </li>
                       <li class='list-group-item'>" . $driver['code'] . " </li>
                       <li class='list-group-item'>
-                          <img class='mx-auto d-block img-fluid' style='border: 1px solid black;' height='100' width='100' src='https://raw.githubusercontent.com/lipis/flag-icons/02b8adceb338125c61f7a1d64d6e5bd9826ae427/flags/1x1/" . $driver['flag'] . ".svg' />
+                          <img title='".$driver['nationality']."' alt='".$driver['nationality']."' class='mx-auto d-block img-fluid' style='border: 1px solid black;' height='100' width='100' src='https://raw.githubusercontent.com/lipis/flag-icons/02b8adceb338125c61f7a1d64d6e5bd9826ae427/flags/1x1/" . $driver['flag'] . ".svg' />
                       </li>
 
                     </ul>
@@ -71,12 +73,17 @@
                       <a href='" . $driver['url'] . "' class='card-link'>Click ME For More</a>
                     </div>
                   </div>";
+                } else {
+                  echo "<p>Driver reference is not passed in the URL</p>";
+                }
                 
                 ?>
               </div>
               <div class="col-8">
                 <?php 
+                if(isset($_GET['driverRef'])) {
                   getDriverRaces();
+                }
                 ?>
               </div>
           </div>

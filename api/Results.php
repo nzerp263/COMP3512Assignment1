@@ -1,6 +1,6 @@
 <?php
 
-  require_once('../config.inc.php');
+  require_once('../data/database.php');
 
     if (isset($_GET['raceId'])) {
       getResult($_GET['raceId']);
@@ -11,8 +11,8 @@
     }
   
     function getResult($raceId) {
-      $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db = getDBObject();
+
       $sql = "SELECT drivers.driverRef, drivers.code, drivers.forename, drivers.surname,  
               races.name, races.round, races.year, races.date, 
               constructors.name, constructors.constructorRef, constructors.nationality
@@ -24,14 +24,20 @@
                 races.raceId = '" . $raceId . "'
               ORDER BY grid";
 
-      $result = $pdo->query($sql);
-      echo json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $data[] = $row;
+      }
+      echo json_encode($data);
+
+      // Close the database connection
+      $db->close();  
     }
   
     function getResultsForDriver($driverRef) {
-      
-      $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db = getDBObject();
 
       $sql = "SELECT results.*
               FROM drivers 
@@ -39,7 +45,15 @@
               WHERE 
                 drivers.driverRef = '" . $driverRef . "'";
 
-      $result = $pdo->query($sql);
-      echo json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $data[] = $row;
+      }
+      echo json_encode($data);
+
+      // Close the database connection
+      $db->close(); 
     }
 ?>

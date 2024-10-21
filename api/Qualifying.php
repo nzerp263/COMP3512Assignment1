@@ -1,14 +1,14 @@
 <?php
 
-  require_once('../config.inc.php');
+  require_once('../data/database.php');
 
     if (isset($_GET['raceId'])) {
       getQualifying($_GET['raceId']);
     } 
   
     function getQualifying($raceId) {
-      $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db = getDBObject();
+
       $sql = "SELECT results.* FROM qualifying 
               INNER JOIN races ON races.raceId = qualifying.raceId 
               INNER JOIN results ON races.raceId = results.raceId  
@@ -16,7 +16,15 @@
                 races.raceId = '" . $raceId . "'
               ORDER BY results.position";
 
-      $result = $pdo->query($sql);
-      echo json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $data[] = $row;
+      }
+      echo json_encode($data);
+
+      // Close the database connection
+      $db->close(); 
     }
 ?>

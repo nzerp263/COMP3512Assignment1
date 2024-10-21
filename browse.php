@@ -2,6 +2,7 @@
   
   require_once('header.php');
   require_once('controller/Races.php');
+  require_once('data/database.php');
 
   if (isset($_GET['raceId'])) {
     $raceId = $_GET['raceId'];

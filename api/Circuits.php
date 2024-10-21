@@ -1,37 +1,50 @@
 <?php
 
-  require_once('../config.inc.php');
+  require_once('../data/database.php');
 
     if (isset($_GET['circuitRef'])) {
       getCircuit($_GET['circuitRef']);
     } else {
       getCircuits();
     }
-  
+
     function getCircuit($circuitRef) {
-      $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db = getDBObject();
       $sql = "SELECT * FROM circuits 
                     INNER JOIN races ON circuits.circuitId = races.circuitId 
                     WHERE 
                       year = 2022 AND
                       circuitRef = '" . $circuitRef . "'";
   
-      $result = $pdo->query($sql);
-      echo json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $db->query($sql);
+      $data = [];
+
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+          $data[] = $row;
+      }
+      echo json_encode($data);
+
+      // Close the database connection
+      $db->close(); 
     }
   
     function getCircuits() {
-      
-      $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db = getDBObject();
 
       $sql = "SELECT * FROM circuits
                     INNER JOIN races ON circuits.circuitId = races.circuitId 
                     WHERE 
                       year = 2022";
   
-      $result = $pdo->query($sql);
-      echo json_encode($result->fetchAll(PDO::FETCH_ASSOC)); 
+      $result = $db->query($sql);
+      $data = [];
+      while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+          $data[] = $row;
+      }
+
+      echo json_encode($data);
+
+      // Close the database connection
+      $db->close();
   } 
 ?>
